@@ -7,12 +7,16 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {"id", "username", "age"})
+@NamedQuery(
+        name = "Member.findByUsername",
+        query = "select m from Member m where m.username = :username"
+)
 public class Member {
 
     @Id @GeneratedValue
     @Column(name = "member_id")
     private Long id;
-    private String userName;
+    private String username;
     private int age;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -20,11 +24,16 @@ public class Member {
     private Team team;
 
     public Member(String userName) {
-        this.userName = userName;
+        this.username = userName;
+    }
+
+    public Member(String userName, int age) {
+        this.username = userName;
+        this.age = age;
     }
 
     public Member(String userName, int age, Team team) {
-        this.userName = userName;
+        this.username = userName;
         this.age = age;
         if (team != null) {
             changeTeam(team);
